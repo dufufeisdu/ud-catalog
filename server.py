@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Catagory, User, Item
+from database_setup import Base, Category, User, Item
 
 
 # Connect to Database and create database session
@@ -16,5 +16,7 @@ session = DBSession()
 
 @app.route('/')
 def showPublicCategory():
-    catagory = session.query(User, Catagory).
-        filter(User.id == Catagory.user_id)
+    publicCategory = session.query(User, Category).
+    filter(User.id == Category.user_id).
+    filter(User.name == 'public').all()
+    return render_template('public.html', category=publicCategory)
