@@ -24,15 +24,19 @@ class Category(Base):
     __tablename__ = 'category'
     id = Column(Integer, primary_key=True)
     name = Column(String(250))
-    items = Column(Integer, ForeignKey("user.id"))
+    user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship(User)
 
 
-class Items(Base):
+class Item(Base):
     __tablename__ = 'items'
     id = Column(Integer, primary_key=True)
+    title = Column(String(250))
+    description = Column(String(1200))
+    user_id = Column(Integer, ForeignKey('user.id'))
     cata_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
+    user = relationship(User)
 
 
 engine = create_engine('sqlite:///catelog.db')
