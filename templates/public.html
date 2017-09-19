@@ -1,0 +1,19 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<div class="row top-menu">
+	<div class="category col-md-6">
+		<table>
+			<th>
+				<td>category</td>
+			</th>
+			<ul>
+				{% for cell in category %}
+				<li><a href="{{url_for('showItems')}}"></a></li>
+				{% endfor %}
+			</ul>
+		</table>
+	</div>
+	<div class="Items col-md-6">
+
+	</div>
+</div>
+{% endblock %}

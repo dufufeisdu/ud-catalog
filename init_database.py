@@ -29,12 +29,12 @@ class Category(Base):
 
 
 class Item(Base):
-    __tablename__ = 'items'
+    __tablename__ = 'item'
     id = Column(Integer, primary_key=True)
     title = Column(String(250))
     description = Column(String(1200))
-    user_id = Column(Integer, ForeignKey('user.id'))
     cata_id = Column(Integer, ForeignKey('category.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     category = relationship(Category)
     user = relationship(User)
 
