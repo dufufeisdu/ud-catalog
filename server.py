@@ -1,7 +1,7 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g
 app = Flask(__name__)
 
-from sqlalchemy import create_engine, asc
+from sqlalchemy import create_engine, asc, text
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, User, Item
 from flask.ext.httpauth import HTTPBasicAuth
@@ -57,7 +57,6 @@ def showCategory():
 
 @app.route('/catalog/<name>/Items')
 def showItems(name):
-    session.query()
 
 
 @app.route('/catalog/<name>/<item>')

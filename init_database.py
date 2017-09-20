@@ -34,9 +34,7 @@ class Item(Base):
     title = Column(String(250))
     description = Column(String(1200))
     cata_id = Column(Integer, ForeignKey('category.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
     category = relationship(Category)
-    user = relationship(User)
 
 
 engine = create_engine('sqlite:///catelog.db')
