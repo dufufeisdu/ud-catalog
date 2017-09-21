@@ -3,6 +3,7 @@ from sqlalchemy import create_engine, asc, text
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, User, Item
 from flask.ext.httpauth import HTTPBasicAuth
+from utilize import categories, items, getAllItems, getCatagoryItems, getItemDescription
 import json
 import os
 
@@ -20,17 +21,6 @@ session = DBSession()
 
 def isLogin():
     return False
-
-
-def parseJson(arrs, cas):
-    Ites = []
-    arrsLength = len(arrs)
-    casLength = len(cas)
-    for x in xrange(arrsLength):
-        s = cas[x]
-        for y in xrange(len(arrs[x])):
-            Ites.append(arrs[x][y]["Title"] + "(" + s + ")")
-    return Ites
 
 
 @auth.verify_password
@@ -52,12 +42,9 @@ def showCategory():
   # 1th user is the public
     if isLogin() is False:
         # user_id 1 is the reserved public resource
-        with open('./static/publicSeed.json') as data_file:
-            data = json.load(data_file)
-            categories = map(lambda x: x["Name"], data["Category"])
-            items = map(lambda x: x["Item"], data["Category"])
-            items = parseJson(categories, items)
-            return render_template('public.html', categories=categories, items=items)
+        allCategories = categories
+        allItems = getAllItems(items, categories)
+        return render_template('public.html', categories=allCategories, items=allItems)
 
     categories = session.query(Category.name, User.id).fliter(Category.name == g.user.username).
     filter(Category.user_id == User.id).all()
@@ -65,16 +52,19 @@ def showCategory():
     items = session.query(Item.name).filter(Item.user_id == user_id).all()
     return render_template('logedInCata.html', category=categories, item=items)
 
-    # for a in publicCategory:
-    #     print(a)
-
 
 @app.route('/catalog/<name>/Items')
 def showItems(name):
+    if isLogin is False:
+        catagoryItems = getCatagoryItems(name)
+        return render_template('public.html', categories=categories, items=catagoryItems)
 
 
-@app.route('/catalog/<name>/<item>')
-def showSubItems:
+@app.route('/catalog/<name>/<title>')
+def showSubItems(name, title):
+    if isLogin is False:
+        description = getItemDescription(name, title)
+        return render_template('itemDescription.html', item=name, description=description)
 
 
 if __name__ == '__main__':
