@@ -5,75 +5,68 @@
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
 Base	../init_database.py	/^Base = declarative_base()$/;"	kind:variable	line:7
-Base	../populate_dbitems.py	/^from init_database import Base, User, Category, Item$/;"	kind:namespace	line:2
 Base	../server.py	/^from database_setup import Base, Category, User, Item$/;"	kind:namespace	line:6
+Categories	../jsontest.py	/^    Categories = map(lambda x: x["Name"], data["Category"])$/;"	kind:variable	line:4
 Category	../init_database.py	/^class Category(Base):$/;"	kind:class	line:23
-Category	../populate_dbitems.py	/^from init_database import Base, User, Category, Item$/;"	kind:namespace	line:2
 Category	../server.py	/^from database_setup import Base, Category, User, Item$/;"	kind:namespace	line:6
 Column	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
-DBSession	../server.py	/^DBSession = sessionmaker(bind=engine)$/;"	kind:variable	line:15
-DBsession	../populate_dbitems.py	/^DBsession = sessionmaker(bind=engine)$/;"	kind:variable	line:9
-Flask	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+DBSession	../server.py	/^DBSession = sessionmaker(bind=engine)$/;"	kind:variable	line:17
+Flask	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 ForeignKey	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
 HTTPBasicAuth	../server.py	/^from flask.ext.httpauth import HTTPBasicAuth$/;"	kind:namespace	line:7
 Integer	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
 Item	../init_database.py	/^class Item(Base):$/;"	kind:class	line:31
-Item	../populate_dbitems.py	/^from init_database import Base, User, Category, Item$/;"	kind:namespace	line:2
 Item	../server.py	/^from database_setup import Base, Category, User, Item$/;"	kind:namespace	line:6
+Items	../jsontest.py	/^    Items = map(lambda x: x["Item"], data["Category"])$/;"	kind:variable	line:6
 String	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
 User	../init_database.py	/^class User(Base):$/;"	kind:class	line:10
-User	../populate_dbitems.py	/^from init_database import Base, User, Category, Item$/;"	kind:namespace	line:2
 User	../server.py	/^from database_setup import Base, Category, User, Item$/;"	kind:namespace	line:6
 __tablename__	../init_database.py	/^    __tablename__ = 'category'$/;"	kind:variable	line:24
 __tablename__	../init_database.py	/^    __tablename__ = 'item'$/;"	kind:variable	line:32
 __tablename__	../init_database.py	/^    __tablename__ = 'user'$/;"	kind:variable	line:11
 app	../server.py	/^app = Flask(__name__)$/;"	kind:variable	line:2
-asc	../server.py	/^from sqlalchemy import create_engine, asc$/;"	kind:namespace	line:4
+asc	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:4
 auth	../server.py	/^auth = HTTPBasicAuth()$/;"	kind:variable	line:9
 cata_id	../init_database.py	/^    cata_id = Column(Integer, ForeignKey('category.id'))$/;"	kind:variable	line:36
-category	../init_database.py	/^    category = relationship(Category)$/;"	kind:variable	line:38
+category	../init_database.py	/^    category = relationship(Category)$/;"	kind:variable	line:37
 create_engine	../init_database.py	/^from sqlalchemy import create_engine$/;"	kind:namespace	line:5
-create_engine	../populate_dbitems.py	/^from sqlalchemy import create_engine$/;"	kind:namespace	line:3
-create_engine	../server.py	/^from sqlalchemy import create_engine, asc$/;"	kind:namespace	line:4
+create_engine	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:4
+data	../jsontest.py	/^    data = json.load(df)$/;"	kind:variable	line:3
 declarative_base	../init_database.py	/^from sqlalchemy.ext.declarative import declarative_base$/;"	kind:namespace	line:3
 description	../init_database.py	/^    description = Column(String(1200))$/;"	kind:variable	line:35
-engine	../init_database.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:42
-engine	../populate_dbitems.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:6
-engine	../server.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:12
-flash	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+engine	../init_database.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:40
+engine	../server.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:14
+flash	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
+g	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 hash_password	../init_database.py	/^    def hash_password(self, password):$/;"	kind:member	line:16
 id	../init_database.py	/^    id = Column(Integer, primary_key=True)$/;"	kind:variable	line:12
 id	../init_database.py	/^    id = Column(Integer, primary_key=True)$/;"	kind:variable	line:25
 id	../init_database.py	/^    id = Column(Integer, primary_key=True)$/;"	kind:variable	line:33
 init_database.py	../init_database.py	1;"	kind:file	line:1
-isLogin	../server.py	/^def isLogin():$/;"	kind:function	line:19
-jsonify	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+isLogin	../server.py	/^def isLogin():$/;"	kind:function	line:21
+json	../jsontest.py	/^import json$/;"	kind:namespace	line:1
+json	../server.py	/^import json$/;"	kind:namespace	line:10
+jsonify	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
+jsontest.py	../jsontest.py	1;"	kind:file	line:1
 name	../init_database.py	/^    name = Column(String(250))$/;"	kind:variable	line:26
 password_hash	../init_database.py	/^    password_hash = Column(String(64))$/;"	kind:variable	line:14
-populate_dbitems.py	../populate_dbitems.py	1;"	kind:file	line:1
-publicCata	../populate_dbitems.py	/^publicCata = Category(name='Basketball', user=publicUser)$/;"	kind:variable	line:24
-publicCata	../populate_dbitems.py	/^publicCata = Category(name='Soccer', user=publicUser)$/;"	kind:variable	line:14
-publicUser	../populate_dbitems.py	/^publicUser = User(username='public', password_hash=None)$/;"	kind:variable	line:11
 pwd_context	../init_database.py	/^from passlib.apps import custom_app_context as pwd_context$/;"	kind:namespace	line:6
-redirect	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+redirect	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 relationship	../init_database.py	/^from sqlalchemy.orm import relationship, sessionmaker$/;"	kind:namespace	line:4
-render_template	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
-request	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+render_template	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
+request	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 server.py	../server.py	1;"	kind:file	line:1
-session	../populate_dbitems.py	/^session = DBsession()$/;"	kind:variable	line:10
-session	../server.py	/^session = DBSession()$/;"	kind:variable	line:16
+session	../server.py	/^session = DBSession()$/;"	kind:variable	line:18
 sessionmaker	../init_database.py	/^from sqlalchemy.orm import relationship, sessionmaker$/;"	kind:namespace	line:4
-sessionmaker	../populate_dbitems.py	/^from sqlalchemy.orm import sessionmaker$/;"	kind:namespace	line:4
 sessionmaker	../server.py	/^from sqlalchemy.orm import sessionmaker$/;"	kind:namespace	line:5
-showCategory	../server.py	/^def showCategory():$/;"	kind:function	line:38
-showItems	../server.py	/^def showItems(name):$/;"	kind:function	line:59
-showSubItems	../server.py	/^def showSubItems:$/;"	kind:function	line:63
+showCategory	../server.py	/^def showCategory():$/;"	kind:function	line:40
+showItems	../server.py	/^def showItems(name):$/;"	kind:function	line:60
+showSubItems	../server.py	/^def showSubItems:$/;"	kind:function	line:64
+text	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:4
 title	../init_database.py	/^    title = Column(String(250))$/;"	kind:variable	line:34
-url_for	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+url_for	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 user	../init_database.py	/^    user = relationship(User)$/;"	kind:variable	line:28
-user	../init_database.py	/^    user = relationship(User)$/;"	kind:variable	line:39
 user_id	../init_database.py	/^    user_id = Column(Integer, ForeignKey("user.id"))$/;"	kind:variable	line:27
-user_id	../init_database.py	/^    user_id = Column(Integer, ForeignKey('user.id'))$/;"	kind:variable	line:37
 username	../init_database.py	/^    username = Column(String(32), index=True)$/;"	kind:variable	line:13
 verify_password	../init_database.py	/^    def verify_password(self, password):$/;"	kind:member	line:19
-verify_password	../server.py	/^def verify_password(username, password):$/;"	kind:function	line:24
+verify_password	../server.py	/^def verify_password(username, password):$/;"	kind:function	line:26

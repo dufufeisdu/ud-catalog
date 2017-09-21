@@ -1,19 +1,18 @@
 {% extends "main.html" %} {% block content %} {% include "header.html" %}
 <div class="row top-menu">
 	<div class="category col-md-3">
-		<table>
-			<th>
-				<td>category</td>
-			</th>
-			<ul>
-				{% for cell in category %}
-				<li><a href="{{url_for('showItems')}}">{{cell}}</a></li>
-				{% endfor %}
-			</ul>
-		</table>
+		<p>Category</p>
+		<ul>
+			{% for cell in categories %}
+			<li><a href="{{url_for('showItems')}}">{{cell}}</a></li>
+			{% endfor %}
+		</ul>
 	</div>
 	<div class="Items col-md-9">
-
+		<p>Items</p>
+		{% for item in items %}
+		<li><a href="{{url_for('editItems')}}">{{item}}</a></li>
+		{% endfor %}
 	</div>
 </div>
 {% endblock %}
