@@ -11,7 +11,7 @@
 	<div class="Items col-md-9">
 		<p>Items</p>
 		{% for item in items %}
-		<li><a href="{{url_for('showSubItems',name = item[1],title =item[0])}}">{{item[0]+'('+item[1]+')'}}</a></li>
+		<li><a href="{{url_for('showSubItems',name = item[1],title =item[0])}}">{{item[0]}}</a></li>
 		{% endfor %}
 	</div>
 </div>
