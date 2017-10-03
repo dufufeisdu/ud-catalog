@@ -1,7 +1,7 @@
 import json
 import string
 import random
-
+import requests
 # seed json used functions
 
 
@@ -28,25 +28,24 @@ def getAllItems(arrs, cas):
     return Items
 
 
-def getCatagoryItems(casName):
-    items = getItems()
-    cat = getCatagory()
-    items = getAllItems(items, cat)
-    print(items)
+def getCatagoryItems(items, categories, casName):
+    items = getAllItems(items, categories)
     return filter(lambda x: x[1] == casName, items)
 
 
-def getItemDescription(casName, title):
-    categories = getCatagory()
-    items = getItems()
+def getItemDescription(items, categories, casName, title):
+
     i = categories.index(casName)
     o = filter(lambda x: x["Title"] == title, items[i])
     return o[0]["Description"]
 
 
+# print(getCatagory())
+# print(getItems())
 # print(getAllItems(getItems(), getCatagory()))
-# print(getCatagoryItems("Basketball"))
-# print(getItemDescription("Basketball", "Player"))
+# print(getCatagoryItems(getItems(), getCatagory(), "Basketball"))
+#print(getItemDescription(getItems(), getCatagory(), "Basketball", "Player"))
+
 
 def getSeverState():
     return ''.join(

@@ -10,9 +10,10 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'user'
     id = Column(Integer, primary_key=True)
-    thirdPartyId = Column(Integer)
-    username = Column(String(32), index=True)
+    third_party_id = Column(String(100))
+    username = Column(String(100), index=True)
     password_hash = Column(String(64))
+    picture = Column(String(250))
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
