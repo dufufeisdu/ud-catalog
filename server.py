@@ -78,6 +78,8 @@ def showCategory():
         items.append(item)
 
     allItems = getAllItems(items, categoryName)
+    g.items = items
+    g.categories = categoryName
     return render_template('catalog.html', categories=categoryName, items=allItems)
 
 
@@ -120,18 +122,34 @@ def getUserJson(username):
 
 @app.route('/catalog/<name>/Items')
 def showItems(name):
-    categories = getCatagory()
-    items = getItems()
-    catagoryItems = getCatagoryItems(items, categories, name)
-    return render_template('publicSub.html', categories=categories, items=catagoryItems)
+    try:
+        login_session['username']
+        categories = g.categories
+        items = g.items
+        catagoryItems = getCatagoryItems(items, categories, name)
+        return render_template('catalogSub.html', categories=categories, items=catagoryItems)
+    except:
+        KeyError
+        categories = getCatagory()
+        items = getItems()
+        catagoryItems = getCatagoryItems(items, categories, name)
+        return render_template('publicSub.html', categories=categories, items=catagoryItems)
 
 
 @app.route('/catalog/<name>/<title>')
 def showSubItems(name, title):
-    categories = getCatagory()
-    items = getItems()
-    description = getItemDescription(items, categories, name, title)
-    return render_template('itemDescription.html', item=name, description=description)
+    try:
+        login_session['username']
+        categories = g.categories
+        items = g.items
+        description = getItemDescription(items, categories, name, title)
+        return render_template('itemDescriptionLogin.html', categories=categories, items=catagoryItems)
+    except:
+        KeyError
+        categories = getCatagory()
+        items = getItems()
+        description = getItemDescription(items, categories, name, title)
+        return render_template('itemDescription.html', item=name, description=description)
 
 
 @app.route('/login')
@@ -141,9 +159,10 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-@app.route('/catalog/<name>/edit')
+@app.route('/catalog/<name>/edit', methods=['GET', 'POST'])
 def editItems(name):
-    return 'edit'
+    if request.method == 'GET':
+        return render_template('edit.html',)
 
 
 @app.route('/catalog/<name>/delete')
