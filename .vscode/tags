@@ -4,7 +4,7 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-APPLICATION_NAME	../server.py	/^APPLICATION_NAME = "practice"$/;"	kind:variable	line:22
+APPLICATION_category	../server.py	/^APPLICATION_category = "practice"$/;"	kind:variable	line:22
 Base	../init_database.py	/^Base = declarative_base()$/;"	kind:variable	line:7
 Base	../server.py	/^from init_database import Base, Category, User, Item$/;"	kind:namespace	line:5
 CLIENT_ID	../server.py	/^CLIENT_ID = json.loads($/;"	kind:variable	line:20
@@ -13,7 +13,7 @@ Category	../init_database.py	/^class Category(Base):$/;"	kind:class	line:25
 Category	../server.py	/^from init_database import Base, Category, User, Item$/;"	kind:namespace	line:5
 Column	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
 DBSession	../server.py	/^DBSession = sessionmaker(bind=engine)$/;"	kind:variable	line:28
-Flask	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+Flask	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 FlowExchangeError	../server.py	/^from oauth2client.client import FlowExchangeError$/;"	kind:namespace	line:12
 ForeignKey	../init_database.py	/^from sqlalchemy import Column, Integer, String, ForeignKey$/;"	kind:namespace	line:2
 HTTPBasicAuth	../server.py	/^from flask_httpauth import HTTPBasicAuth$/;"	kind:namespace	line:6
@@ -29,36 +29,39 @@ __tablename__	../init_database.py	/^    __tablename__ = 'category'$/;"	kind:vari
 __tablename__	../init_database.py	/^    __tablename__ = 'item'$/;"	kind:variable	line:34
 __tablename__	../init_database.py	/^    __tablename__ = 'user'$/;"	kind:variable	line:11
 a	../Tests/jsontest.py	/^    def a(arrs, cas):$/;"	kind:function	line:10
-app	../server.py	/^app = Flask(__name__)$/;"	kind:variable	line:18
+addItem	../server.py	/^def addItem():$/;"	kind:function	line:86
+app	../server.py	/^app = Flask(__category__)$/;"	kind:variable	line:18
 asc	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:3
 auth	../server.py	/^auth = HTTPBasicAuth()$/;"	kind:variable	line:19
 cata_id	../init_database.py	/^    cata_id = Column(Integer, ForeignKey('category.id'))$/;"	kind:variable	line:38
 category	../init_database.py	/^    category = relationship(Category)$/;"	kind:variable	line:39
 client	../server.py	/^from oauth2client import client$/;"	kind:namespace	line:15
-createRawCatelog	../server.py	/^def createRawCatelog(user_id, CateList):$/;"	kind:function	line:225
-createUser	../server.py	/^def createUser(login_session):$/;"	kind:function	line:214
+createRawCatelog	../server.py	/^def createRawCatelog(user_id, CateList):$/;"	kind:function	line:325
+createUser	../server.py	/^def createUser(login_session):$/;"	kind:function	line:314
 create_engine	../init_database.py	/^from sqlalchemy import create_engine$/;"	kind:namespace	line:5
 create_engine	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:3
 data	../Tests/jsontest.py	/^    data = json.load(df)$/;"	kind:variable	line:5
 declarative_base	../init_database.py	/^from sqlalchemy.ext.declarative import declarative_base$/;"	kind:namespace	line:3
-deleteItems	../server.py	/^def deleteItems(name):$/;"	kind:function	line:126
+deleteItems	../server.py	/^def deleteItems(category, title):$/;"	kind:function	line:182
 description	../init_database.py	/^    description = Column(String(1200))$/;"	kind:variable	line:37
 discovery	../server.py	/^from apiclient import discovery$/;"	kind:namespace	line:13
-editItems	../server.py	/^def editItems(name):$/;"	kind:function	line:121
+editItems	../server.py	/^def editItems(category, title):$/;"	kind:function	line:166
 engine	../init_database.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:42
 engine	../server.py	/^engine = create_engine('sqlite:\/\/\/catelog.db')$/;"	kind:variable	line:25
-flash	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+flash	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 flow_from_clientsecrets	../server.py	/^from oauth2client.client import flow_from_clientsecrets$/;"	kind:namespace	line:11
-gconnect	../server.py	/^def gconnect():$/;"	kind:function	line:131
+g	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
+gconnect	../server.py	/^def gconnect():$/;"	kind:function	line:199
+gdisconnect	../server.py	/^def gdisconnect():$/;"	kind:function	line:283
 getAllItems	../utilize.py	/^def getAllItems(arrs, cas):$/;"	kind:function	line:20
 getCatagory	../utilize.py	/^def getCatagory():$/;"	kind:function	line:8
-getCatagoryItems	../utilize.py	/^def getCatagoryItems(casName):$/;"	kind:function	line:31
-getItemDescription	../utilize.py	/^def getItemDescription(casName, title):$/;"	kind:function	line:38
+getCatagoryItems	../utilize.py	/^def getCatagoryItems(items, categories, casName):$/;"	kind:function	line:31
+getItemDescription	../utilize.py	/^def getItemDescription(items, categories, casName, title):$/;"	kind:function	line:36
 getItems	../utilize.py	/^def getItems():$/;"	kind:function	line:14
-getSeverState	../utilize.py	/^def getSeverState():$/;"	kind:function	line:52
-getUserID	../server.py	/^def getUserID(g_id):$/;"	kind:function	line:247
-getUserInfo	../server.py	/^def getUserInfo(user_id):$/;"	kind:function	line:242
-getUserJson	../server.py	/^def getUserJson(username):$/;"	kind:function	line:78
+getSeverState	../utilize.py	/^def getSeverState():$/;"	kind:function	line:50
+getUserID	../server.py	/^def getUserID(g_id):$/;"	kind:function	line:350
+getUserInfo	../server.py	/^def getUserInfo(user_id):$/;"	kind:function	line:345
+getUserJson	../server.py	/^def getUserJson(username):$/;"	kind:function	line:101
 hash_password	../init_database.py	/^    def hash_password(self, password):$/;"	kind:member	line:18
 httplib2	../server.py	/^import httplib2$/;"	kind:namespace	line:14
 id	../init_database.py	/^    id = Column(Integer, primary_key=True)$/;"	kind:variable	line:12
@@ -69,10 +72,11 @@ isLogin	../server.py	/^def isLogin():$/;"	kind:function	line:32
 json	../Tests/jsontest.py	/^import json$/;"	kind:namespace	line:1
 json	../server.py	/^import json$/;"	kind:namespace	line:9
 json	../utilize.py	/^import json$/;"	kind:namespace	line:1
-jsonify	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+jsonify	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 jsontest.py	../Tests/jsontest.py	1;"	kind:file	line:1
-login	../server.py	/^def login(provider):$/;"	kind:function	line:72
+login	../server.py	/^def login(provider):$/;"	kind:function	line:95
 login_session	../server.py	/^from flask import session as login_session$/;"	kind:namespace	line:2
+logout	../server.py	/^def logout():$/;"	kind:function	line:160
 make_response	../server.py	/^from flask import make_response$/;"	kind:namespace	line:7
 name	../init_database.py	/^    name = Column(String(250))$/;"	kind:variable	line:28
 os	../Tests/jsontest.py	/^import os$/;"	kind:namespace	line:2
@@ -81,27 +85,28 @@ password_hash	../init_database.py	/^    password_hash = Column(String(64))$/;"	k
 picture	../init_database.py	/^    picture = Column(String(250))$/;"	kind:variable	line:16
 pwd_context	../init_database.py	/^from passlib.apps import custom_app_context as pwd_context$/;"	kind:namespace	line:6
 random	../utilize.py	/^import random$/;"	kind:namespace	line:3
-redirect	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+redirect	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 relationship	../init_database.py	/^from sqlalchemy.orm import relationship, sessionmaker$/;"	kind:namespace	line:4
-render_template	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
-request	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+render_template	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
+request	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 requests	../server.py	/^import requests$/;"	kind:namespace	line:16
+requests	../utilize.py	/^import requests$/;"	kind:namespace	line:4
 server.py	../server.py	1;"	kind:file	line:1
 session	../server.py	/^session = DBSession()$/;"	kind:variable	line:29
 sessionmaker	../init_database.py	/^from sqlalchemy.orm import relationship, sessionmaker$/;"	kind:namespace	line:4
 sessionmaker	../server.py	/^from sqlalchemy.orm import sessionmaker$/;"	kind:namespace	line:4
-showCategory	../server.py	/^def showCategory():$/;"	kind:function	line:53
-showItems	../server.py	/^def showItems(name):$/;"	kind:function	line:100
-showLogin	../server.py	/^def showLogin():$/;"	kind:function	line:114
-showSubItems	../server.py	/^def showSubItems(name, title):$/;"	kind:function	line:107
+showCategory	../server.py	/^def showCategory():$/;"	kind:function	line:54
+showItems	../server.py	/^def showItems(category):$/;"	kind:function	line:124
+showLogin	../server.py	/^def showLogin():$/;"	kind:function	line:153
+showSubItems	../server.py	/^def showSubItems(category, title):$/;"	kind:function	line:138
 string	../utilize.py	/^import string$/;"	kind:namespace	line:2
 text	../server.py	/^from sqlalchemy import create_engine, asc, text$/;"	kind:namespace	line:3
 third_party_id	../init_database.py	/^    third_party_id = Column(String(100))$/;"	kind:variable	line:13
 title	../init_database.py	/^    title = Column(String(250))$/;"	kind:variable	line:36
-url_for	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash$/;"	kind:namespace	line:1
+url_for	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g$/;"	kind:namespace	line:1
 user	../init_database.py	/^    user = relationship(User)$/;"	kind:variable	line:30
 user_id	../init_database.py	/^    user_id = Column(Integer, ForeignKey("user.id"))$/;"	kind:variable	line:29
 username	../init_database.py	/^    username = Column(String(100), index=True)$/;"	kind:variable	line:14
 utilize.py	../utilize.py	1;"	kind:file	line:1
 verify_password	../init_database.py	/^    def verify_password(self, password):$/;"	kind:member	line:21
-verify_password	../server.py	/^def verify_password(username, password):$/;"	kind:function	line:39
+verify_password	../server.py	/^def verify_password(username, password):$/;"	kind:function	line:40

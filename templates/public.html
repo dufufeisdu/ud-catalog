@@ -4,14 +4,14 @@
 		<p>Category</p>
 		<ul>
 			{% for cell in categories %}
-			<li><a href="{{url_for('showItems',name = cell)}}">{{cell}}</a></li>
+			<li><a href="{{url_for('showItems',category = cell)}}">{{cell}}</a></li>
 			{% endfor %}
 		</ul>
 	</div>
 	<div class="Items col-md-9">
 		<p>Items</p>
 		{% for item in items %}
-		<li><a href="{{url_for('showSubItems',name = item[1],title =item[0])}}">{{item[0]+'('+item[1]+')'}}</a></li>
+		<li><a href="{{url_for('showSubItems',category = item[1],title =item[0])}}">{{item[0]+'('+item[1]+')'}}</a></li>
 		{% endfor %}
 	</div>
 </div>

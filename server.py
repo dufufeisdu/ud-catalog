@@ -30,11 +30,9 @@ session = DBSession()
 
 
 def isLogin():
-    try:
-        login_session['username']
+    if 'username' in login_session:
         return True
-    except:
-        KeyError
+    else:
         return False
 
 
@@ -66,7 +64,7 @@ def showCategory():
     dbUserId = dbUserId[0]
     categories = session.query(Category).filter(
         Category.user_id == dbUserId).all()
-    categoryName = map(lambda x: x.name, categories)
+    category = map(lambda x: x.name, categories)
     categoryId = map(lambda x: x.id, categories)
     categoryLength = len(categories)
     items = []
@@ -77,10 +75,10 @@ def showCategory():
                               'Description': x.description}, s)
         items.append(item)
 
-    allItems = getAllItems(items, categoryName)
-    g.items = items
-    g.categories = categoryName
-    return render_template('catalog.html', categories=categoryName, items=allItems)
+    allItems = getAllItems(items, category)
+    login_session['items'] = items
+    login_session['categories'] = category
+    return render_template('catalog.html', categories=category, items=allItems)
 
 
 @app.route('/addItem')
@@ -101,55 +99,53 @@ def login(provider):
 @app.route('/<username>/catagory.json')
 def getUserJson(username):
 
-    if login_session['username'] is not None:
-        jsonDic = {'Name': username, 'Category': []}
+    if isLogin():
+        jsonDic = {'category': username, 'Category': []}
         user_id = session.query(User.id).filter_by(
             username=username).one()
         user_id = user_id[0]
         categories = session.query(Category).filter_by(
             user_id=Category.user_id).all()
         cateIDs = map(lambda x: x.id, categories)
-        cateName = map(lambda x: x.name, categories)
+        cateName = map(lambda x: x.category, categories)
         for i in xrange(len(cateIDs)):
             Items = session.query(Item).filter_by(cata_id=cateIDs[i]).all()
             Items = map(
                 lambda x: {'Title': x.title, 'Description': x.description}, Items)
-            jsonDic['Category'].append({'Name': cateName[i], 'Item': Items})
+            jsonDic['Category'].append(
+                {'category': cateName[i], 'Item': Items})
         return jsonify(jsonDic)
+    else:
+        return render_template('error.html', message="You need login first")
 
-    return "You are not log in"
 
-
-@app.route('/catalog/<name>/Items')
-def showItems(name):
-    try:
-        login_session['username']
-        categories = g.categories
-        items = g.items
-        catagoryItems = getCatagoryItems(items, categories, name)
+@app.route('/catalog/<category>/Items')
+def showItems(category):
+    if isLogin():
+        categories = login_session['categories']
+        items = login_session['items']
+        catagoryItems = getCatagoryItems(items, categories, category)
         return render_template('catalogSub.html', categories=categories, items=catagoryItems)
-    except:
-        KeyError
+    else:
         categories = getCatagory()
         items = getItems()
-        catagoryItems = getCatagoryItems(items, categories, name)
+        catagoryItems = getCatagoryItems(items, categories, category)
         return render_template('publicSub.html', categories=categories, items=catagoryItems)
 
 
-@app.route('/catalog/<name>/<title>')
-def showSubItems(name, title):
-    try:
-        login_session['username']
-        categories = g.categories
-        items = g.items
-        description = getItemDescription(items, categories, name, title)
-        return render_template('itemDescriptionLogin.html', categories=categories, items=catagoryItems)
-    except:
-        KeyError
+@app.route('/catalog/<category>/<title>')
+def showSubItems(category, title):
+    if isLogin():
+        categories = login_session['categories']
+        items = login_session['items']
+        description = getItemDescription(items, categories, category, title)
+        return render_template('itemDescriptionLogin.html',
+                               category=category, title=title, description=description)
+    else:
         categories = getCatagory()
         items = getItems()
-        description = getItemDescription(items, categories, name, title)
-        return render_template('itemDescription.html', item=name, description=description)
+        description = getItemDescription(items, categories, category, title)
+        return render_template('itemDescription.html', item=category, description=description)
 
 
 @app.route('/login')
@@ -159,15 +155,38 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-@app.route('/catalog/<name>/edit', methods=['GET', 'POST'])
-def editItems(name):
-    if request.method == 'GET':
-        return render_template('edit.html',)
+@app.route('/catalog/<category>/<title>/edit', methods=['GET', 'POST'])
+def editItems(category, title):
+    if isLogin():
+        if request.methods == 'GET':
+            categories = login_session['categories']
+            items = login_session['items']
+            description = getItemDescription(
+                items, categories, category, title)
+            return render_template('edit.html', categories=categories,
+                                   title=title, description=description, category=category)
+        if request.methods == 'POST':
+            request.form['']
+
+    else:
+        return render_template('error.html', message="You need login first")
 
 
-@app.route('/catalog/<name>/delete')
-def deleteItems(name):
-    return 'delete'
+@app.route('/catalog/<category>/<title>/delete', methods=['GET', 'POST'])
+def deleteItems(category, title):
+    if isLogin():
+        if request.method == 'GET':
+            return render_template('delete.html', category=category, title=title)
+        if request.method == 'POST':
+            session.query(Item.description).\
+                filter(Category.user_id == login_session['user_id']).\
+                filter(Category.id == Item.cata_id).\
+                filter(Category.name == category).\
+                filter(Item.title == title).delete()
+            session.commit()
+            return redirect('/')
+    else:
+        return render_template('error.html', message="You need login first")
 
 
 @app.route('/gconnect', methods=['POST'])
@@ -254,9 +273,42 @@ def gconnect():
     return output
 
 
+@app.route('/gdisconnect')
+def gdisconnect():
+        # Only disconnect a connected user.
+    access_token = login_session.get('access_token')
+    if access_token is None:
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+    if result['status'] == '200':
+        # Reset the user's sesson.
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['picture']
+        del login_session['provider']
+        del login_session['categories']
+        del login_session['items']
+        del login_session['user_id']
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.', 400))
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 def createUser(login_session):
-    newUser = User(username=login_session['username'], third_party_id=login_session['gplus_id'],
-                   picture=login_session['picture'])
+    newUser = User(username=login_session['username'],
+                   third_party_id=login_session['gplus_id'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
 
@@ -276,6 +328,7 @@ def createRawCatelog(user_id, CateList):
         cateId = newCate.id
         cateName = newCate.name
         itemList = getCatagoryItems(items, categories, cateName)
+        print('itemList:', itemList)
         for item in itemList:
             description = getItemDescription(
                 items, categories, item[1], item[0])

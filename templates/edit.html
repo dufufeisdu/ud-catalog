@@ -3,13 +3,28 @@
 	<h1>
 		Edit Items
 	</h1>
-	<form action="{{url_for('')}}">
-		<label for="">
-				<input type="text">
-		</label>
+	<form id="editform" method="post" action="{{url_for('editConfirm')}}">
+		<div>
+			<label for="title">Title
+						<input id="title"  type="text" value={{title}}>
+				</label>
+		</div>
+		<div>
+			<label for="description">Description
+				<input type="text" id="description" value={{description}}>
+			</label>
+		</div>
+		<select name="categoryList" id="categoryList">
+				{% for cate in categories %}
 
-
-	</form>
+				<option value={{cate}} {% if cate==category %} selected {% endif %}>{{cate}}</option>
+				{% endfor %}
+			</select>
+		<div>
+			<button>Submit</button>
+		</div>
+</div>
+</form>
 
 </div>
 {% endblock %}
