@@ -53,7 +53,6 @@ def verify_password(username, password):
 @app.route('/')
 def showCategory():
     if isLogin() is False:
-        # user_id 1 is the reserved public resource
         items = getItems()
         categories = getCatagory()
         allItems = getAllItems(items, categories)
@@ -155,19 +154,62 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+@app.route('logout')
+def showLogout():
+    if login_session.get('provider') == 'google':
+        return redirect(url_for('gdisconnect'))
+
+
 @app.route('/catalog/<category>/<title>/edit', methods=['GET', 'POST'])
 def editItems(category, title):
     if isLogin():
-        if request.methods == 'GET':
-            categories = login_session['categories']
-            items = login_session['items']
-            description = getItemDescription(
-                items, categories, category, title)
+        categories = login_session['categories']
+        items = login_session['items']
+        description = getItemDescription(
+            items, categories, category, title)
+        if request.method == 'GET':
             return render_template('edit.html', categories=categories,
                                    title=title, description=description, category=category)
-        if request.methods == 'POST':
-            request.form['']
+        else:
+            if category != request.form.get('category', None):
+                # Delete the category-> Item-> description
 
+                old_item = session.query(Item).\
+                    filter(Category.user_id == login_session['user_id']).\
+                    filter(Category.name == category).\
+                    filter(Item.cata_id == Category.id).\
+                    filter(Item.title == title).\
+                    filter(Item.description == description).one()
+                session.delete(old_item)
+                session.commit()
+
+                update_category = session.query(Category).filter(
+                    Category.user_id == login_session['user_id']).\
+                    filter(Category.name == request.form.get(
+                        'category', None)).one()
+                new_item = Item(
+                    title=request.form['title'], description=request.form['description'],
+                    cata_id=update_category.id)
+                session.add(new_item)
+                session.commit()
+                return redirect(url_for("showCategory"))
+            elif title != request.form.get('title', None) or\
+                    description != request.form.get('description', None):
+                old_category = session.query(Category).\
+                    filter(Category.user_id == login_session['user_id']).\
+                    filter(Category.name == category).\
+                    one()
+                session.query(Item).\
+                    filter(Item.cata_id == old_category.id).\
+                    filter(Item.title == title).\
+                    filter(Item.description == description).update({
+                        "title": request.form.get('title', None),
+                        "description": request.form.get('description', None)
+                    }, synchronize_session=False)
+                session.commit()
+                return redirect(url_for("showCategory"))
+            else:
+                return redirect(url_for("showCategory"))
     else:
         return render_template('error.html', message="You need login first")
 
@@ -178,11 +220,12 @@ def deleteItems(category, title):
         if request.method == 'GET':
             return render_template('delete.html', category=category, title=title)
         if request.method == 'POST':
-            session.query(Item.description).\
+            item_del = session.query(Item).\
                 filter(Category.user_id == login_session['user_id']).\
                 filter(Category.id == Item.cata_id).\
                 filter(Category.name == category).\
-                filter(Item.title == title).delete()
+                filter(Item.title == title).one()
+            session.delete(item_del)
             session.commit()
             return redirect('/')
     else:
@@ -275,7 +318,6 @@ def gconnect():
 
 @app.route('/gdisconnect')
 def gdisconnect():
-        # Only disconnect a connected user.
     access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(
@@ -324,11 +366,13 @@ def createRawCatelog(user_id, CateList):
         newCateLog = Category(name=cate, user_id=user_id)
         session.add(newCateLog)
         session.commit()
-        newCate = session.query(Category).filter_by(name=cate).one()
+        newCate = session.query(Category).\
+            filter_by(name=cate).\
+            filter_by(user_id=user_id).\
+            one()
         cateId = newCate.id
         cateName = newCate.name
         itemList = getCatagoryItems(items, categories, cateName)
-        print('itemList:', itemList)
         for item in itemList:
             description = getItemDescription(
                 items, categories, item[1], item[0])
