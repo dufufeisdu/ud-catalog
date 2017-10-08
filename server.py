@@ -1,19 +1,24 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g
-from flask import session as login_session
-from sqlalchemy import create_engine, asc, text
-from sqlalchemy.orm import sessionmaker
-from init_database import Base, Category, User, Item
-from flask_httpauth import HTTPBasicAuth
-from flask import make_response
-from utilize import *
+#!/usr/bin/env python2
 import json
 import os
+import requests
+
+from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g, make_response
+from flask import session as login_session
+from flask_httpauth import HTTPBasicAuth
+
+from sqlalchemy import create_engine, asc
+from sqlalchemy.orm import sessionmaker
+
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from apiclient import discovery
 import httplib2
 from oauth2client import client
-import requests
+
+from init_database import Base, Category, User, Item
+from utilize import *
+
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -55,29 +60,26 @@ def showCategory():
     if isLogin() is False:
         items = getItems()
         categories = getCatagory()
-        allItems = getAllItems(items, categories)
-        return render_template('public.html', categories=categories, items=allItems)
+        all_items = getAllItems(items, categories)
+        return render_template('public.html', categories=categories, items=all_items)
 
-    dbUserId = session.query(User.id).filter_by(
-        username=login_session['username']).one()
-    dbUserId = dbUserId[0]
     categories = session.query(Category).filter(
-        Category.user_id == dbUserId).all()
+        Category.user_id == login_session.get('user_id', None)).all()
     category = map(lambda x: x.name, categories)
-    categoryId = map(lambda x: x.id, categories)
-    categoryLength = len(categories)
+    category_id = map(lambda x: x.id, categories)
+    category_length = len(categories)
     items = []
-    for i in xrange(categoryLength):
+    for i in xrange(category_length):
         s = session.query(Item).filter(
-            categoryId[i] == Item.cata_id).all()
+            category_id[i] == Item.cata_id).all()
         item = map(lambda x: {'Title': x.title,
                               'Description': x.description}, s)
         items.append(item)
 
-    allItems = getAllItems(items, category)
+    all_items = getAllItems(items, category)
     login_session['items'] = items
     login_session['categories'] = category
-    return render_template('catalog.html', categories=category, items=allItems)
+    return render_template('catalog.html', categories=category, items=all_items)
 
 
 @app.route('/addItem', methods=['GET', 'POST'])
@@ -96,9 +98,7 @@ def addItem():
                 new_cate = Category(
                     name=category, user_id=login_session['user_id'])
                 session.add(new_cate)
-                print('111')
                 session.commit()
-            print('22221')
             cata_id = session.query(Category).\
                 filter(Category.user_id == login_session['user_id']).\
                 filter(Category.name == category).one().id
@@ -112,25 +112,24 @@ def addItem():
         return render_template('error.html', message="You should log in first")
 
 
-@app.route('/<username>/catagory.json')
-def getUserJson(username):
+@app.route('/catagory.json')
+def getUserJson():
 
     if isLogin():
-        jsonDic = {'category': username, 'Category': []}
-        user_id = session.query(User.id).filter_by(
-            username=username).one()
-        user_id = user_id[0]
+        json_dic = {'category': login_session.get(
+            'username', None), 'Category': []}
+        user_id = login_session.get('user_id', None)
         categories = session.query(Category).filter_by(
             user_id=Category.user_id).all()
-        cateIDs = map(lambda x: x.id, categories)
-        cateName = map(lambda x: x.category, categories)
-        for i in xrange(len(cateIDs)):
-            Items = session.query(Item).filter_by(cata_id=cateIDs[i]).all()
-            Items = map(
-                lambda x: {'Title': x.title, 'Description': x.description}, Items)
-            jsonDic['Category'].append(
-                {'category': cateName[i], 'Item': Items})
-        return jsonify(jsonDic)
+        cate_ids = map(lambda x: x.id, categories)
+        cate_names = map(lambda x: x.name, categories)
+        for i in xrange(len(cate_ids)):
+            items = session.query(Item).filter_by(cata_id=cate_ids[i]).all()
+            items = map(
+                lambda x: {'Title': x.title, 'Description': x.description}, items)
+            json_dic['Category'].append(
+                {'name': cate_names[i], 'Item': items})
+        return jsonify(json_dic)
     else:
         return render_template('error.html', message="You need login first")
 
@@ -140,13 +139,13 @@ def showItems(category):
     if isLogin():
         categories = login_session['categories']
         items = login_session['items']
-        catagoryItems = getCatagoryItems(items, categories, category)
-        return render_template('catalogSub.html', categories=categories, items=catagoryItems)
+        catagory_items = getCatagoryItems(items, categories, category)
+        return render_template('catalogSub.html', categories=categories, items=catagory_items)
     else:
         categories = getCatagory()
         items = getItems()
-        catagoryItems = getCatagoryItems(items, categories, category)
-        return render_template('publicSub.html', categories=categories, items=catagoryItems)
+        catagory_items = getCatagoryItems(items, categories, category)
+        return render_template('publicSub.html', categories=categories, items=catagory_items)
 
 
 @app.route('/catalog/<category>/<title>')
@@ -175,6 +174,10 @@ def showLogin():
 def showLogout():
     if login_session.get('provider') == 'google':
         return redirect(url_for('gdisconnect'))
+    # hold positions for facebook/ twitter/
+
+    # hold position for user sign up
+    return render_template('error.html', message="You need login first")
 
 
 @app.route('/catalog/<category>/<title>/edit', methods=['GET', 'POST'])
@@ -188,6 +191,8 @@ def editItems(category, title):
             return render_template('edit.html', categories=categories,
                                    title=title, description=description, category=category)
         else:
+            # if user changed the category, delete the item and
+            # create a new item on the selected category
             if category != request.form.get('category', None):
                 # Delete the category-> Item-> description
 
@@ -210,6 +215,8 @@ def editItems(category, title):
                 session.add(new_item)
                 session.commit()
                 return redirect(url_for("showCategory"))
+            # if user change title or description
+            # but not the category, update that item
             elif title != request.form.get('title', None) or\
                     description != request.form.get('description', None):
                 old_category = session.query(Category).\
@@ -319,7 +326,7 @@ def gconnect():
     user_id = getUserID(login_session['gplus_id'])
     if not user_id:
         user_id = createUser(login_session)
-        createRawCatelog(user_id, getCatagory())
+        createRawCatalog(user_id, getCatagory())
     login_session['user_id'] = user_id
 
     output = ''
@@ -366,9 +373,9 @@ def gdisconnect():
 
 
 def createUser(login_session):
-    newUser = User(username=login_session['username'],
-                   third_party_id=login_session['gplus_id'], picture=login_session['picture'])
-    session.add(newUser)
+    new_user = User(username=login_session['username'],
+                    third_party_id=login_session['gplus_id'], picture=login_session['picture'])
+    session.add(new_user)
     session.commit()
 
     user = session.query(User).filter_by(
@@ -376,40 +383,27 @@ def createUser(login_session):
     return user.id
 
 
-def createRawCatelog(user_id, CateList):
+def createRawCatalog(user_id, CateList):
     items = getItems()
     categories = getCatagory()
     for cate in CateList:
-        newCateLog = Category(name=cate, user_id=user_id)
-        session.add(newCateLog)
+        new_category = Category(name=cate, user_id=user_id)
+        session.add(new_category)
         session.commit()
-        newCate = session.query(Category).\
+        new_cate = session.query(Category).\
             filter_by(name=cate).\
             filter_by(user_id=user_id).\
             one()
-        cateId = newCate.id
-        cateName = newCate.name
-        itemList = getCatagoryItems(items, categories, cateName)
-        for item in itemList:
+        cate_id = new_cate.id
+        cate_names = new_cate.name
+        item_list = getCatagoryItems(items, categories, cate_names)
+        for item in item_list:
             description = getItemDescription(
                 items, categories, item[1], item[0])
-            newItem = Item(
-                title=item[0], description=description, cata_id=cateId)
-            session.add(newItem)
+            new_item = Item(
+                title=item[0], description=description, cata_id=cate_id)
+            session.add(new_item)
             session.commit()
-
-
-def getUserInfo(user_id):
-    user = session.query(User).filter_by(id=user_id).one()
-    return user
-
-
-def getUserID(g_id):
-    try:
-        user = session.query(User).filter_by(third_party_id=g_id).one()
-        return user.id
-    except:
-        return None
 
 
 if __name__ == '__main__':
