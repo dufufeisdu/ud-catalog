@@ -80,12 +80,35 @@ def showCategory():
     return render_template('catalog.html', categories=category, items=allItems)
 
 
-@app.route('/addItem')
+@app.route('/addItem', methods=['GET', 'POST'])
 def addItem():
-    try:
-        if login_session['username'] is not None:
-            return render_template()
-    except KeyError:
+    if isLogin():
+        if request.method == 'GET':
+            return render_template('addItems.html', categories=login_session['categories'])
+        if request.method == 'POST':
+            title = request.form.get('title', None)
+            print("title:", title)
+            description = request.form.get('description', None)
+            print("dsec:", description)
+            category = request.form.get('category', None)
+            print("cate:", category)
+            if category not in login_session['categories']:
+                new_cate = Category(
+                    name=category, user_id=login_session['user_id'])
+                session.add(new_cate)
+                print('111')
+                session.commit()
+            print('22221')
+            cata_id = session.query(Category).\
+                filter(Category.user_id == login_session['user_id']).\
+                filter(Category.name == category).one().id
+            new_item = Item(
+                title=title, description=description, cata_id=cata_id)
+            session.add(new_item)
+            session.commit()
+            return redirect(url_for("showCategory"))
+
+    else:
         return render_template('error.html', message="You should log in first")
 
 
