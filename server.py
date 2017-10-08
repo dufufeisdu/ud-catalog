@@ -89,12 +89,6 @@ def addItem():
         return render_template('error.html', message="You should log in first")
 
 
-@app.route('/oauth/<provider>', methods=['POST'])
-def login(provider):
-    if provide == 'google':
-        print('google')
-
-
 @app.route('/<username>/catagory.json')
 def getUserJson(username):
 
@@ -154,7 +148,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
-@app.route('logout')
+@app.route('/logout')
 def showLogout():
     if login_session.get('provider') == 'google':
         return redirect(url_for('gdisconnect'))
