@@ -2,7 +2,6 @@ import json
 import string
 import random
 import requests
-# seed json used functions
 
 
 def getCatagory():
@@ -18,14 +17,14 @@ def getItems():
 
 
 def getAllItems(arrs, cas):
-    Items = []
+    items = []
     arrsLength = len(arrs)
     casLength = len(cas)
     for x in xrange(arrsLength):
         s = cas[x]
         for y in xrange(len(arrs[x])):
-            Items.append([arrs[x][y]["Title"], s])
-    return Items
+            items.append([arrs[x][y]["Title"], s])
+    return items
 
 
 def getCatagoryItems(items, categories, casName):
@@ -50,6 +49,3 @@ def getItemDescription(items, categories, casName, title):
 def getSeverState():
     return ''.join(
         random.choice(string.ascii_uppercase + string.digits) for x in range(32))
-
-
-# User infor functions

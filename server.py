@@ -24,7 +24,6 @@ app = Flask(__name__)
 auth = HTTPBasicAuth()
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
-APPLICATION_NAME = "practice"
 
 # Connect to Database and create database session
 engine = create_engine('sqlite:///catelog.db')
