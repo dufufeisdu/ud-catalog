@@ -1,0 +1,13 @@
+{% extends "main.html" %} {% block content %} {% include "header.html" %}
+<div class="errorMessage">
+	{{message}}
+</div>
+<script>
+	(function redirct() {
+		setTimeout(function () {
+			window.location.href = "/";
+		}, 1500);
+	})()
+
+</script>
+{% endblock %}
