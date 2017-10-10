@@ -405,6 +405,19 @@ def createRawCatalog(user_id, CateList):
             session.commit()
 
 
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(g_id):
+    try:
+        user = session.query(User).filter_by(third_party_id=g_id).one()
+        return user.id
+    except:
+        return None
+
+
 if __name__ == '__main__':
     app.secret_key = '\x1a\xbeZ\xb7g\x1f\x00\xfe\x1a|s\x13y\xd8r)(E\x88\xa4go(\xc1'
     app.debug = True
