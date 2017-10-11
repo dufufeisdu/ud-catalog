@@ -88,16 +88,14 @@ def addItem():
             return render_template('addItems.html', categories=login_session['categories'])
         if request.method == 'POST':
             title = request.form.get('title', None)
-            print("title:", title)
             description = request.form.get('description', None)
-            print("dsec:", description)
             category = request.form.get('category', None)
-            print("cate:", category)
             if category not in login_session['categories']:
                 new_cate = Category(
                     name=category, user_id=login_session['user_id'])
                 session.add(new_cate)
                 session.commit()
+
             cata_id = session.query(Category).\
                 filter(Category.user_id == login_session['user_id']).\
                 filter(Category.name == category).one().id

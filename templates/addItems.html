@@ -13,13 +13,14 @@
 			<label for="description">Description
 				<input type = 'text' id="description" name="description" size = 100 value="">
 			</label>
-			<select name="category" id="categoryList">
-					{% for cate in categories %}
-					<option value="{{cate}}">{{cate}}</option>
-					{% endfor %}
-			</select>
-			<input type="submit" value="submit">
+
 		</div>
+		<div>
+			<label for="category">Category
+				<input name="category" type="text" value="">
+			</label>
+		</div>
+		<input type="submit" value="submit">
 	</form>
 </div>
 {% endblock %}

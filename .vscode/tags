@@ -52,12 +52,14 @@ flow_from_clientsecrets	../server.py	/^from oauth2client.client import flow_from
 g	../server.py	/^from flask import Flask, render_template, request, redirect, jsonify, url_for, flash, g, make_response$/;"	kind:namespace	line:6
 gconnect	../server.py	/^def gconnect():$/;"	kind:function	line:259
 gdisconnect	../server.py	/^def gdisconnect():$/;"	kind:function	line:343
-getAllItems	../utilize.py	/^def getAllItems(arrs, cas):$/;"	kind:function	line:20
-getCatagory	../utilize.py	/^def getCatagory():$/;"	kind:function	line:8
-getCatagoryItems	../utilize.py	/^def getCatagoryItems(items, categories, casName):$/;"	kind:function	line:31
-getItemDescription	../utilize.py	/^def getItemDescription(items, categories, casName, title):$/;"	kind:function	line:36
-getItems	../utilize.py	/^def getItems():$/;"	kind:function	line:14
-getSeverState	../utilize.py	/^def getSeverState():$/;"	kind:function	line:50
+getAllItems	../utilize.py	/^def getAllItems(arrs, cas):$/;"	kind:function	line:19
+getCatagory	../utilize.py	/^def getCatagory():$/;"	kind:function	line:7
+getCatagoryItems	../utilize.py	/^def getCatagoryItems(items, categories, casName):$/;"	kind:function	line:30
+getItemDescription	../utilize.py	/^def getItemDescription(items, categories, casName, title):$/;"	kind:function	line:35
+getItems	../utilize.py	/^def getItems():$/;"	kind:function	line:13
+getSeverState	../utilize.py	/^def getSeverState():$/;"	kind:function	line:49
+getUserID	../server.py	/^def getUserID(g_id):$/;"	kind:function	line:413
+getUserInfo	../server.py	/^def getUserInfo(user_id):$/;"	kind:function	line:408
 getUserJson	../server.py	/^def getUserJson():$/;"	kind:function	line:115
 hash_password	../init_database.py	/^    def hash_password(self, password):$/;"	kind:member	line:18
 httplib2	../server.py	/^import httplib2$/;"	kind:namespace	line:16
