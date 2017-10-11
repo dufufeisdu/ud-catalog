@@ -120,7 +120,7 @@ def deleteCategory(category):
                 filter_by(user_id=login_session['user_id']).\
                 filter_by(name=category).one()
             items = session.query(Item).\
-                filter(id == category.id).all()
+                filter(Item.cata_id == category.id).all()
             print(items)
             if len(items) != 0:
                 return render_template('error.html',
