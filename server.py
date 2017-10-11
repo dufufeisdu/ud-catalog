@@ -12,7 +12,6 @@ from sqlalchemy.orm import sessionmaker
 
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
-from apiclient import discovery
 import httplib2
 from oauth2client import client
 
@@ -111,6 +110,28 @@ def addItem():
         return render_template('error.html', message="You should log in first")
 
 
+@app.route('/<category>/delete', methods=['GET', 'POST'])
+def deleteCategory(category):
+    if isLogin():
+        if request.method == 'GET':
+            return render_template('delete.html', category=category)
+        if request.method == 'POST':
+            category = session.query(Category).\
+                filter_by(user_id=login_session['user_id']).\
+                filter_by(name=category).one()
+            items = session.query(Item).\
+                filter(id == category.id).all()
+            print(items)
+            if len(items) != 0:
+                return render_template('error.html',
+                                       message="Please delete items before delete category")
+            session.delete(category)
+            session.commit()
+            return redirect('/')
+    else:
+        return render_template('error.html', message="You need login first")
+
+
 @app.route('/catagory.json')
 def getUserJson():
 
@@ -139,7 +160,8 @@ def showItems(category):
         categories = login_session['categories']
         items = login_session['items']
         catagory_items = getCatagoryItems(items, categories, category)
-        return render_template('catalogSub.html', categories=categories, items=catagory_items)
+        return render_template('catalogSub.html', categories=categories,
+                               category=category, items=catagory_items)
     else:
         categories = getCatagory()
         items = getItems()
@@ -152,6 +174,7 @@ def showSubItems(category, title):
     if isLogin():
         categories = login_session['categories']
         items = login_session['items']
+        print(items)
         description = getItemDescription(items, categories, category, title)
         return render_template('itemDescriptionLogin.html',
                                category=category, title=title, description=description)

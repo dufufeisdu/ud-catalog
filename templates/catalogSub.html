@@ -13,7 +13,8 @@
 		{% for item in items %}
 		<li><a href="{{url_for('showSubItems',category = item[1],title =item[0])}}">{{item[0]}}</a></li>
 		{% endfor %}
-		<a href="{{url_for('addItem')}}">AddItem</a>
+		<a href="{{url_for('addItem')}}">AddItem</a> {% if items|length == 0 %}
+		<a href="{{url_for('deleteCategory',category = category)}}">Delete Category</a> {% endif %}
 	</div>
 </div>
 {% endblock %}
