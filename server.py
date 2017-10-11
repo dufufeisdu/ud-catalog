@@ -121,7 +121,6 @@ def deleteCategory(category):
                 filter_by(name=category).one()
             items = session.query(Item).\
                 filter(Item.cata_id == category.id).all()
-            print(items)
             if len(items) != 0:
                 return render_template('error.html',
                                        message="Please delete items before delete category")
@@ -174,7 +173,6 @@ def showSubItems(category, title):
     if isLogin():
         categories = login_session['categories']
         items = login_session['items']
-        print(items)
         description = getItemDescription(items, categories, category, title)
         return render_template('itemDescriptionLogin.html',
                                category=category, title=title, description=description)
