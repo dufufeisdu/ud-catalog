@@ -87,6 +87,8 @@ def addItem():
         if request.method == 'GET':
             return render_template('addItems.html', categories=login_session['categories'])
         if request.method == 'POST':
+            if isRepeat(request, login_session):
+                return render_template('error.html', message="You have created the same item")
             title = request.form.get('title', None)
             description = request.form.get('description', None)
             category = request.form.get('category', None)
@@ -180,6 +182,9 @@ def showLogout():
 @app.route('/catalog/<category>/<title>/edit', methods=['GET', 'POST'])
 def editItems(category, title):
     if isLogin():
+        if isRepeat(request, login_session):
+            return render_template('error.html', message="You have created the same item")
+
         categories = login_session['categories']
         items = login_session['items']
         description = getItemDescription(
@@ -188,7 +193,8 @@ def editItems(category, title):
             return render_template('edit.html', categories=categories,
                                    title=title, description=description, category=category)
         else:
-            # if user changed the category, delete the item and
+            # if user changed the category,
+            # delete the item and
             # create a new item on the selected category
             if category != request.form.get('category', None):
                 # Delete the category-> Item-> description
@@ -414,6 +420,21 @@ def getUserID(g_id):
         return user.id
     except:
         return None
+
+
+def isRepeat(request, login_session):
+    try:
+        category = session.query(Category).\
+            filter(Category.user_id == login_session['user_id']).\
+            filter(Category.name == request.form.get('category', None)).one()
+        session.query(Item).\
+            filter(Item.cata_id == category.id).\
+            filter(Item.title == request.form.get('title', None)).\
+            filter(Item.description == request.form.get(
+                'description', None)).one()
+        return True
+    except:
+        return False
 
 
 if __name__ == '__main__':
