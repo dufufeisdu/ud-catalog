@@ -131,15 +131,14 @@ def deleteCategory(category):
         return render_template('error.html', message="You need login first")
 
 
-@app.route('/catagory.json')
+@app.route('/catalog.json')
 def getUserJson():
-
     if isLogin():
-        json_dic = {'category': login_session.get(
+        json_dic = {'UserName': login_session.get(
             'username', None), 'Category': []}
         user_id = login_session.get('user_id', None)
         categories = session.query(Category).filter_by(
-            user_id=Category.user_id).all()
+            user_id=user_id).all()
         cate_ids = map(lambda x: x.id, categories)
         cate_names = map(lambda x: x.name, categories)
         for i in xrange(len(cate_ids)):
@@ -151,6 +150,29 @@ def getUserJson():
         return jsonify(json_dic)
     else:
         return render_template('error.html', message="You need login first")
+
+
+@app.route('/catalog.json/<category>')
+def getCategoryJson(category):
+    if isLogin() is False:
+        return render_template('error.html', message="You need login first")
+
+    if category not in login_session.get('categories', None):
+        return render_template('error.html', message="category not exist!")
+
+    selected_category = session.query(Category).\
+        filter_by(user_id=login_session.get('user_id', None)).\
+        filter_by(name=category).one()
+
+    cate_json = {'Name': category, 'Items': []}
+
+    selected_items = session.query(Item).\
+        filter_by(cata_id=selected_category.id).\
+        all()
+    for item in selected_items:
+        cate_json['Items'].append(
+            {'Title': item.title, 'Description': item.description})
+    return jsonify(cate_json)
 
 
 @app.route('/catalog/<category>/Items')
