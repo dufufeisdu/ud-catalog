@@ -55,12 +55,14 @@ def verify_password(username, password):
 
 @app.route('/')
 def showCategory():
+    # if not log in, render data from file .static/pblicSeed.json
     if isLogin() is False:
         items = getItems()
         categories = getCatagory()
         all_items = getAllItems(items, categories)
         return render_template('public.html', categories=categories, items=all_items)
 
+    # if is log in, query data from database and add data to login_session
     categories = session.query(Category).filter(
         Category.user_id == login_session.get('user_id', None)).all()
     category = map(lambda x: x.name, categories)
