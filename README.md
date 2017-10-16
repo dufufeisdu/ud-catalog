@@ -9,4 +9,15 @@
 In vagrant terminal, run `python server.py`.
 ### step 4
 Go to the localhost:8000
+## JSON DATA
+### 1:
+Each user will get a copy of initial data first login
+### 2:
+User can only get his/her own data JSON
+### 3:
+Whole catalog JSON:
+http://localhost:8000/catalog.json
+single categroy JSON:
+http://localhost:8000/catalog.json/<Your created category Name>
+
 
