@@ -4,15 +4,19 @@ import string
 import random
 import requests
 
+import os
 
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+PUBLICDATA = os.path.join(PROJECT_ROOT,'static/publicSeed.json' )
 def getCatagory():
-    with open('./static/publicSeed.json') as data_file:
+    with open(PUBLICDATA) as data_file:
         data = json.load(data_file)
         return map(lambda x: x["Name"], data["Category"])
 
 
 def getItems():
-    with open('./static/publicSeed.json') as data_file:
+    with open(PUBLICDATA) as data_file:
         data = json.load(data_file)
         return map(lambda x: x["Item"], data["Category"])
 

@@ -38,7 +38,12 @@ class Item(Base):
     cata_id = Column(Integer, ForeignKey('category.id'))
     category = relationship(Category)
 
+import os
 
-engine = create_engine('sqlite:///catelog.db')
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+DATABASE = os.path.join(PROJECT_ROOT, 'catelog.db')
+
+engine = create_engine('sqlite:///'+DATABASE)
 
 Base.metadata.create_all(engine)

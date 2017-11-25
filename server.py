@@ -21,11 +21,15 @@ from utilize import *
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
+PROJECT_ROOT = os.path.dirname(os.path.realpath(__file__))
+
+DATABASE = os.path.join(PROJECT_ROOT, 'catelog.db')
+SECRET = os.path.join(PROJECT_ROOT, 'client_secrets.json')
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open(SECRET, 'r').read())['web']['client_id']
 
 # Connect to Database and create database session
-engine = create_engine('sqlite:///catelog.db')
+engine = create_engine('sqlite:///'+DATABASE+'?check_same_thread=False')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
@@ -315,7 +319,7 @@ def gconnect():
     code = request.data
     try:
         # Upgrade the authorization code into a credentials object
-        oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+        oauth_flow = flow_from_clientsecrets(SECRET, scope='')
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
@@ -482,7 +486,7 @@ def isRepeat(request, login_session):
         return False
 
 
+app.secret_key = '\x1a\xbeZ\xb7g\x1f\x00\xfe\x1a|s\x13y\xd8r)(E\x88\xa4go(\xc1'
 if __name__ == '__main__':
-    app.secret_key = '\x1a\xbeZ\xb7g\x1f\x00\xfe\x1a|s\x13y\xd8r)(E\x88\xa4go(\xc1'
     app.debug = True
     app.run(host='localhost', port=8000)

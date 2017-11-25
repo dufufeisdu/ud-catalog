@@ -27,11 +27,9 @@ Vagrant.configure("2") do |config|
     pip2 install --upgrade pip
     pip2 install flask packaging oauth2client redis passlib flask-httpauth
     pip2 install sqlalchemy flask-sqlalchemy psycopg2 bleach requests
-    su postgres -c 'createuser -dRS vagrant'
-    su vagrant -c 'createdb'
-    su vagrant -c 'createdb news'
-    su vagrant -c 'createdb forum'
-    su vagrant -c 'psql forum -f /vagrant/forum/forum.sql'
+    apt-get install apache2
+    apt-get install libapache2-mod-wsgi
+
     vagrantTip="[35m[1mThe shared directory is located at /vagrant\\nTo access your shared files: cd /vagrant[m"
     echo -e $vagrantTip > /etc/motd
     wget http://download.redis.io/redis-stable.tar.gz
